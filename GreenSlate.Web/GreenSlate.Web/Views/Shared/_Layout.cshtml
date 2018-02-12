@@ -20,5 +20,16 @@
     @Scripts.Render("~/bundles/all")
     @RenderSection("Scripts", required: false)
     @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        $(document).ready(function () {
+            var module = null;
+            requirejs(["app"], function (app) {
+                app.start();
+            });
+            
+        }
+        );
+    </script>
 </body>
 </html>

@@ -4255,6 +4255,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
+    <Content Include="SPA\App.js" />
+    <Content Include="SPA\Global\requireConfig.js" />
+    <Content Include="SPA\Router.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\_Home.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -4276,6 +4279,10 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="SPA\Controllers\" />
+    <Folder Include="SPA\Styles\" />
+    <Folder Include="SPA\ViewModels\" />
+    <Folder Include="SPA\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
