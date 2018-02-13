@@ -1,6 +1,7 @@
 ﻿using GreenSlate.Web.Models;
 using GreenSlate.Web.ViewModels;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -21,7 +22,8 @@ namespace GreenSlate.Web.Controllers.Api
         // GET: api/ToDoTasks
         public IQueryable<ToDoTask> GetToDoTasks()
         {
-            return db.ToDoTasks;
+            string userId = User.Identity.GetUserId();
+            return db.ToDoTasks.Where(t=>t.CreatedFor==userId);
         }
 
         // GET: api/ToDoTasks/5
@@ -39,17 +41,23 @@ namespace GreenSlate.Web.Controllers.Api
 
         // PUT: api/ToDoTasks/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutToDoTask(int id, ToDoTask toDoTask)
+        public IHttpActionResult PutToDoTask(int id, ToDoViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            ToDoTask toDoTask = db.ToDoTasks.SingleOrDefault(t => t.Id == id);
             if (id != toDoTask.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
+
+            toDoTask.CreatedFor = model.CreatedFor;
+            toDoTask.Title = model.Title;
+            toDoTask.EstimatedHours = model.Estimation;
+            toDoTask.Completed = model.Completed;
 
             db.Entry(toDoTask).State = EntityState.Modified;
 
@@ -76,28 +84,34 @@ namespace GreenSlate.Web.Controllers.Api
         [ResponseType(typeof(ToDoTask))]
         public IHttpActionResult PostToDoTask(ToDoViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Something is wrong");
+            }
+
             string userId = User.Identity.GetUserId();
+            var createdfor = db.AspNetUsers.SingleOrDefault(u => u.Email.Equals(model.CreatedFor));
+            
+            if (createdfor == null)
+            {
+                return BadRequest("Target user Not Found");
+            }
+
             ToDoTask toDoTask = new ToDoTask
             {
                 CreatedBy =userId,
                 CreatedTime = DateTime.Now,
-                CreatedFor = Membership.GetUserNameByEmail(model.CreatedFor),
+                CreatedFor = createdfor.Id,
                 Title = model.Title,
                 Completed = false,
                 EstimatedHours = model.Estimation
 
             };
-                
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+           
             db.ToDoTasks.Add(toDoTask);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = toDoTask.Id }, toDoTask);
+            return Ok();
         }
 
         // DELETE: api/ToDoTasks/5
