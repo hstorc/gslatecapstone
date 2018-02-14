@@ -74,8 +74,12 @@ namespace GreenSlate.Web
 
                     "~/3rdParty/signalr/jquery.signalR-2.2.1.min.js",
                     "~/3rdParty/requirejs/require.js",
-                    "~/SPA/requireConfig.js",
+                    "~/SPA/Global/requireConfig.js",
+                    "~/SPA/Global/globalVariables.js",
+                    "~/SPA/Util/layout.js",
+                    "~/SPA/Router.js",
                     "~/SPA/App.js",
+                    "~/SPA/Global/globalVariables.js",
                     "~/3rdParty/bootstrap-3.3.4/js/bootstrap.min.js",
                     "~/3rdParty/bootstrap-notify/bootstrap-notify.min.js",
                     "~/3rdParty/bootstrap-slides/jquery.slides.min.js"

@@ -28,7 +28,9 @@
             requirejs(["app"], function (app) {
                 app.start();
             });
-            
+            requirejs(["router"], function (app) {
+                    app.start();
+                });
         }
         );
     </script>

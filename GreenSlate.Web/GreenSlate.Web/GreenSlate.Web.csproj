@@ -3185,6 +3185,9 @@
     <Content Include="3rdParty\Kendo-UI-Professional-3-1111-2015\styles\web\Uniform\sprite_kpi.png" />
     <Content Include="3rdParty\Kendo-UI-Professional-3-1111-2015\styles\web\Uniform\sprite_kpi_2x.png" />
     <Content Include="3rdParty\loadash\lodash.js" />
+    <Content Include="3rdParty\pubsub\pubsub.js" />
+    <Content Include="3rdParty\requirejs\require.js" />
+    <Content Include="3rdParty\signalr\jquery.signalR-2.2.1.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap.css" />
@@ -4299,8 +4302,14 @@
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="SPA\App.js" />
+    <Content Include="SPA\Controllers\Home.js" />
+    <Content Include="SPA\Controllers\ToDoTask.js" />
+    <Content Include="SPA\Global\globalVariables.js" />
     <Content Include="SPA\Global\requireConfig.js" />
     <Content Include="SPA\Router.js" />
+    <Content Include="SPA\Util\ajax.js" />
+    <Content Include="SPA\Util\Layout.js" />
+    <Content Include="SPA\ViewModels\ToDoTasks\index.js" />
     <Content Include="Unity.Mvc4.README.txt" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\_Home.cshtml" />
@@ -4332,15 +4341,13 @@
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="SPA\Views\ToDoTasks\index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Persistance\" />
     <Folder Include="Services\" />
-    <Folder Include="SPA\Controllers\" />
     <Folder Include="SPA\Styles\" />
-    <Folder Include="SPA\ViewModels\" />
-    <Folder Include="SPA\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
