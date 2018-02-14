@@ -1,147 +1,102 @@
-﻿using GreenSlate.Web.Models;
+﻿using System.Collections.Generic;
 using GreenSlate.Web.ViewModels;
 using Microsoft.AspNet.Identity;
-using Newtonsoft.Json;
-using System;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Security;
+using GreenSlate.Business;
+using GreenSlate.Database.Model;
+using GreenSlate.Web.Helpers;
 
 namespace GreenSlate.Web.Controllers.Api
 {
+
+
     [Authorize]
     public class ToDoTasksController : ApiController
     {
         //unity dependancy here!!
-        private ToDoByHayimEntities db = new ToDoByHayimEntities();
+       
 
+        private ITodoService todoService;
+
+        public ToDoTasksController()
+        {
+            
+        }
+
+        public ToDoTasksController(ITodoService service)
+        {
+            todoService = service;
+        }
         // GET: api/ToDoTasks
-        public IQueryable<ToDoTask> GetToDoTasks()
+        public List<ToDoViewModel> GetToDoTasks()
         {
             string userId = User.Identity.GetUserId();
-            return db.ToDoTasks.Where(t=>t.CreatedFor==userId);
+            return todoService.GetToDoTasks(userId).Select(t => t.ToTaskViewModel()).ToList();
         }
 
         // GET: api/ToDoTasks/5
-        [ResponseType(typeof(ToDoTask))]
+        [ResponseType(typeof(ToDoViewModel))]
         public IHttpActionResult GetToDoTask(int id)
         {
-            ToDoTask toDoTask = db.ToDoTasks.Find(id);
+            string userId = User.Identity.GetUserId();
+            DtoToDoTask toDoTask = todoService.GetToDoTask(id, userId);
             if (toDoTask == null)
             {
                 return NotFound();
             }
 
-            return Ok(toDoTask);
+            return Ok(toDoTask.ToTaskViewModel());
         }
+
+        
 
         // PUT: api/ToDoTasks/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutToDoTask(int id, ToDoViewModel model)
         {
+            string userId = User.Identity.GetUserId();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            ToDoTask toDoTask = db.ToDoTasks.SingleOrDefault(t => t.Id == id);
-            if (id != toDoTask.Id)
-            {
-                return NotFound();
-            }
-
-            toDoTask.CreatedFor = model.CreatedFor;
-            toDoTask.Title = model.Title;
-            toDoTask.EstimatedHours = model.Estimation;
-            toDoTask.Completed = model.Completed;
-
-            db.Entry(toDoTask).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ToDoTaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(todoService.PutToDoTask(id,model.ToDtoTask(),userId));
         }
 
         // POST: api/ToDoTasks
-        [ResponseType(typeof(ToDoTask))]
+        [ResponseType(typeof(ToDoViewModel))]
         public IHttpActionResult PostToDoTask(ToDoViewModel model)
         {
+            string userId = User.Identity.GetUserId();
             if (!ModelState.IsValid)
             {
                 return BadRequest("Something is wrong");
             }
 
-            string userId = User.Identity.GetUserId();
-            var createdfor = db.AspNetUsers.SingleOrDefault(u => u.Email.Equals(model.CreatedFor));
+            HttpStatusCode code = todoService.PostToDoTask(model.ToDtoTask(), userId);
             
-            if (createdfor == null)
-            {
-                return BadRequest("Target user Not Found");
-            }
-
-            ToDoTask toDoTask = new ToDoTask
-            {
-                CreatedBy =userId,
-                CreatedTime = DateTime.Now,
-                CreatedFor = createdfor.Id,
-                Title = model.Title,
-                Completed = false,
-                EstimatedHours = model.Estimation
-
-            };
-           
-            db.ToDoTasks.Add(toDoTask);
-            db.SaveChanges();
-
-            return Ok();
+            return StatusCode(code);
         }
 
         // DELETE: api/ToDoTasks/5
         [ResponseType(typeof(ToDoTask))]
         public IHttpActionResult DeleteToDoTask(int id)
         {
-            ToDoTask toDoTask = db.ToDoTasks.Find(id);
-            if (toDoTask == null)
-            {
-                return NotFound();
-            }
-
-            db.ToDoTasks.Remove(toDoTask);
-            db.SaveChanges();
-
-            return Ok(toDoTask);
+            string userId = User.Identity.GetUserId();
+            return StatusCode(todoService.DeleteToDoTask(id,userId));
+            
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                todoService.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        private bool ToDoTaskExists(int id)
-        {
-            return db.ToDoTasks.Count(e => e.Id == id) > 0;
-        }
+        
     }
 }

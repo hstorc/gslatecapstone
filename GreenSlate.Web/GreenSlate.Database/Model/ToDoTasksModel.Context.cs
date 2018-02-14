@@ -7,19 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-
-namespace GreenSlate.Web.Models
+namespace GreenSlate.Database.Model
 {
-    using GreenSlate.Web.Persistance;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
 
-
-
-    public partial class ToDoByHayimEntities1 : DbContext,IDbToDoContext
+    public interface Stam
     {
-        public ToDoByHayimEntities1()
-            : base("name=ToDoByHayimEntities")
+        //DbEntityEntry Entry(TEntity entity) where TEntity : class;
+        DbEntityEntry Entry(object entity);
+    }
+
+    public partial class ToDoDbContext : DbContext
+    {
+        public ToDoDbContext()
+            : base("name=ToDoDbContext")
         {
         }
     
@@ -27,8 +29,7 @@ namespace GreenSlate.Web.Models
         {
             throw new UnintentionalCodeFirstException();
         }
-        
-
+    
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<ToDoTask> ToDoTasks { get; set; }
     }
