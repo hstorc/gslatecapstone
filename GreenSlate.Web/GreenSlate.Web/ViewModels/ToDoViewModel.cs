@@ -7,5 +7,6 @@
         public short Estimation { get; set; }
         public bool? Completed { get; set; }
         public string CreatedByName { get; internal set; }
+        public int Id { get; set; }
     }
 }

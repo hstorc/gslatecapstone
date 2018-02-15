@@ -14,13 +14,6 @@ namespace GreenSlate.Database.Model
     
     public partial class AspNetUser
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AspNetUser()
-        {
-            this.ToDoTasks = new HashSet<ToDoTask>();
-            this.ToDoTasks1 = new HashSet<ToDoTask>();
-        }
-    
         public string Id { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
@@ -34,10 +27,5 @@ namespace GreenSlate.Database.Model
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ToDoTask> ToDoTasks { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ToDoTask> ToDoTasks1 { get; set; }
     }
 }

@@ -9,15 +9,10 @@
 
 namespace GreenSlate.Database.Model
 {
+    using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
-    public interface Stam
-    {
-        //DbEntityEntry Entry(TEntity entity) where TEntity : class;
-        DbEntityEntry Entry(object entity);
-    }
-
+    
     public partial class ToDoDbContext : DbContext
     {
         public ToDoDbContext()

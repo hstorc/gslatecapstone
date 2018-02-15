@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using GreenSlate.Database.Model;
-using System.Linq;
 using System.Net;
 
 namespace GreenSlate.Business
 {
     public interface ITodoService
     {
-        List<DtoToDoTask> GetToDoTasks(string userId);
+        List<DtoToDoTask> GetToDoTasks();
         DtoToDoTask GetToDoTask(int id, string userid);
         HttpStatusCode PutToDoTask(int id, DtoToDoTask model, string userid);
         HttpStatusCode PostToDoTask(DtoToDoTask model, string userid);

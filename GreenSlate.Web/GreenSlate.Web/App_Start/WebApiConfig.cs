@@ -10,7 +10,7 @@ namespace GreenSlate.Web
         {
             
             var settings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
-            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            //settings.ContractResolver = new pasca CamelCasePropertyNamesContractResolver();
             settings.Formatting = Formatting.Indented;
 
             config.MapHttpAttributeRoutes();

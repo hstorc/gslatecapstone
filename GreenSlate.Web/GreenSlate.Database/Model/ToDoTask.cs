@@ -21,8 +21,5 @@ namespace GreenSlate.Database.Model
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public int Id { get; set; }
         public Nullable<bool> Completed { get; set; }
-    
-        public virtual AspNetUser AspNetUser { get; set; }
-        public virtual AspNetUser AspNetUser1 { get; set; }
     }
 }

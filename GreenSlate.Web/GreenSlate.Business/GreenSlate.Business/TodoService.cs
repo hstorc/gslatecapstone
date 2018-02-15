@@ -24,33 +24,34 @@ namespace GreenSlate.Business
             // this.db = db;
             this.db =db ;
         }
-        public List<DtoToDoTask> GetToDoTasks(string userId)
+        public List<DtoToDoTask> GetToDoTasks()
         {
-            return db.ToDoTasks.Where(t => t.CreatedFor == userId)
+            return db.ToDoTasks
                 .Select(v=>new DtoToDoTask
                 {
+                    Id = v.Id,
                     Completed = v.Completed,
                     Title = v.Title,
                     Estimation = v.EstimatedHours,
-                    CreatedByName = v.AspNetUser.Email
+                    CreatedBy = v.CreatedBy
                 }).ToList();
         }
 
         public DtoToDoTask GetDtoToDoTask(int id,string userId)
         {
-            ToDoTask toDoTask = db.ToDoTasks.Find(id);
+            //ignoring userid- anybody can get
+            ToDoTask toDoTask = GetToDoTask(id,userId);
             if (toDoTask == null
-                || toDoTask.Id == 0
-                ||toDoTask.CreatedBy!=userId
-                ||toDoTask.CreatedFor!=userId)
+                || toDoTask.Id == 0)
             {
                 return null;
             }
 
             return new DtoToDoTask
             {
+                Id=toDoTask.Id,
                 CreatedFor = toDoTask.CreatedFor,
-                CreatedByName = toDoTask.CreatedBy,
+                CreatedBy = toDoTask.CreatedBy,
                 Completed = toDoTask.Completed,
                 Title = toDoTask.Title,
                 Estimation = toDoTask.EstimatedHours
@@ -60,11 +61,10 @@ namespace GreenSlate.Business
 
         public ToDoTask GetToDoTask(int id, string userId)
         {
+            //ignoring userid- anybody can get
             ToDoTask toDoTask = db.ToDoTasks.Find(id);
             if (toDoTask == null
-                || toDoTask.Id == 0
-                || toDoTask.CreatedBy != userId
-                || toDoTask.CreatedFor != userId)
+                || toDoTask.Id == 0)
             {
                 return null;
             }
@@ -77,16 +77,18 @@ namespace GreenSlate.Business
 
         public HttpStatusCode PutToDoTask(int id, DtoToDoTask model,string userId)
         {
+            //ignoring userid- anybody can get
             ToDoTask toDoTask = GetToDoTask(id,userId);
-            if (toDoTask==null||toDoTask.CreatedBy!=userId)
+            if (toDoTask==null)
             {
                 return HttpStatusCode.NotFound;
             }
 
-            toDoTask.CreatedFor = model.CreatedFor;
+            //toDoTask.CreatedFor = model.CreatedFor;
             toDoTask.Title = model.Title;
             toDoTask.EstimatedHours = model.Estimation;
             toDoTask.Completed = model.Completed;
+            //toDoTask.CreatedBy = model.CreatedBy;
 
             db.Entry(toDoTask).State = EntityState.Modified;
 
@@ -105,18 +107,22 @@ namespace GreenSlate.Business
 
         public HttpStatusCode PostToDoTask(DtoToDoTask model, string userId)
         {
-            var createdfor = db.AspNetUsers.SingleOrDefault(u => u.Email.Equals(model.CreatedFor));
+            // var createdfor = db.AspNetUsers.SingleOrDefault(u => u.Email.Equals(model.CreatedFor));
+            var users= db.AspNetUsers.ToList();
+            Random random = new Random();
+            int index = random.Next(0, users.Count);
+            var createdby = users[index];
 
-            if (createdfor == null)
+            if (createdby == null)
             {
                 return HttpStatusCode.NotFound;
             }
 
             ToDoTask toDoTask = new ToDoTask
             {
-                CreatedBy = userId,
+                Id = model.Id,
+                CreatedBy = createdby.Name,
                 CreatedTime = DateTime.Now,
-                CreatedFor = createdfor.Id,
                 Title = model.Title,
                 Completed = false,
                 EstimatedHours = model.Estimation
@@ -130,16 +136,13 @@ namespace GreenSlate.Business
 
         public HttpStatusCode DeleteToDoTask(int id,string userid)
         {
+            //ignoring userid- anybody can delete
             ToDoTask toDoTask = GetToDoTask(id,userid);
             if (toDoTask == null)
             {
                 return HttpStatusCode.NotFound;
             }
-
-            if (toDoTask.CreatedBy != userid)
-            {
-                return HttpStatusCode.Forbidden;
-            }
+           
 
             db.ToDoTasks.Remove(toDoTask);
             db.SaveChanges();

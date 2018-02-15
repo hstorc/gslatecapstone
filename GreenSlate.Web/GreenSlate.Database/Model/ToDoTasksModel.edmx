@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ToDoTasksModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ToDoTasksModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -35,44 +35,11 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Completed" Type="bit" />
         </EntityType>
-        <Association Name="FK_Task_CreatedByUser">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="ToDoTask" Type="Self.ToDoTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ToDoTask">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Task_CreatedForUser">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="ToDoTask" Type="Self.ToDoTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ToDoTask">
-              <PropertyRef Name="CreatedFor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ToDoTasksModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ToDoTask" EntityType="Self.ToDoTask" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Task_CreatedByUser" Association="Self.FK_Task_CreatedByUser">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="ToDoTask" EntitySet="ToDoTask" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Task_CreatedForUser" Association="Self.FK_Task_CreatedForUser">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="ToDoTask" EntitySet="ToDoTask" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ToDoTasksModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -93,8 +60,6 @@
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="ToDoTasks" Relationship="Self.FK_Task_CreatedByUser" FromRole="AspNetUsers" ToRole="ToDoTask" />
-          <NavigationProperty Name="ToDoTasks1" Relationship="Self.FK_Task_CreatedForUser" FromRole="AspNetUsers" ToRole="ToDoTask" />
         </EntityType>
         <EntityType Name="ToDoTask">
           <Key>
@@ -107,44 +72,10 @@
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Completed" Type="Boolean" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Task_CreatedByUser" FromRole="ToDoTask" ToRole="AspNetUsers" />
-          <NavigationProperty Name="AspNetUser1" Relationship="Self.FK_Task_CreatedForUser" FromRole="ToDoTask" ToRole="AspNetUsers" />
         </EntityType>
-        <Association Name="FK_Task_CreatedByUser">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="0..1" />
-          <End Role="ToDoTask" Type="Self.ToDoTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ToDoTask">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Task_CreatedForUser">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="0..1" />
-          <End Role="ToDoTask" Type="Self.ToDoTask" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ToDoTask">
-              <PropertyRef Name="CreatedFor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Default" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="ToDoTasks" EntityType="Self.ToDoTask" />
-          <AssociationSet Name="FK_Task_CreatedByUser" Association="Self.FK_Task_CreatedByUser">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="ToDoTask" EntitySet="ToDoTasks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Task_CreatedForUser" Association="Self.FK_Task_CreatedForUser">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="ToDoTask" EntitySet="ToDoTasks" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>

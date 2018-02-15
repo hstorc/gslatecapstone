@@ -28,9 +28,9 @@
                 dataSource: {
                     transport: {
                         read: { url: "/api/todotasks", type: "GET" },
-                        update: { url: "/api/todotasks", type: "PUT" },
+                        update: { url: "/api/todotasks/1002", type: "PUT" },
                         create: { url: "/api/todotasks", type: "POST" },
-                        destroy: { url: "/api/todotasks", type: "DELETE" }
+                        destroy: { url: "/api/todotasks/1042", type: "DELETE" }
                     },
                     schema: {
                         model: {
@@ -45,14 +45,14 @@
                         }
                     },
                     sort: [{ field: "Id", dir: "asc" }],
-                    pageSize: 5
+                    pageSize: 10
                 },
                 columns: [
-                    { field: "title", title: "Title", width: "120px" },
-                    { field: "estimation", title: "Estimated Hours", width: "100px" },
-                    { field: "createdByName", title: "created By" },
-                    { command: ["update", "destroy"], title: "&nbsp;", width: "240px" }],
-                editable: "popup",
+                    { field: "Title", title: "Title", width: "120px" },
+                    { field: "Estimation", title: "Estimated Hours", width: "100px" },
+                    { field: "CreatedByName", title: "created By" },
+                    { command: ["edit", "destroy"], title: "&nbsp;", width: "240px" }],
+                editable: "inline",
                 pageable: true,
                 sortable: true,
                 toolbar: ["create"]

@@ -2,7 +2,6 @@
 using Microsoft.AspNet.Identity;
 namespace GreenSlate.Web.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
       //todo: put the cache back  [OutputCache(Duration = 30, VaryByParam = "none")]

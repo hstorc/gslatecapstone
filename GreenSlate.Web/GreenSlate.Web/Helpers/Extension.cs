@@ -9,8 +9,9 @@ namespace GreenSlate.Web.Helpers
         {
             return new ToDoViewModel
             {
+                Id=task.Id,
                 CreatedFor = task.CreatedFor,
-                CreatedByName = task.CreatedByName,
+                CreatedByName = task.CreatedBy,
                 Estimation = task.Estimation,
                 Completed = task.Completed,
                 Title = task.Title
@@ -21,8 +22,9 @@ namespace GreenSlate.Web.Helpers
         {
             return new DtoToDoTask
             {
+                Id=model.Id,
                 CreatedFor = model.CreatedFor,
-                CreatedByName = model.CreatedByName,
+                CreatedBy = model.CreatedByName,
                 Estimation = model.Estimation,
                 Completed = model.Completed,
                 Title = model.Title

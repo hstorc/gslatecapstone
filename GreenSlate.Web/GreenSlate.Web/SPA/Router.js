@@ -136,27 +136,6 @@
                 // add to the body attribute
                 $(document.body).attr("data-route", prettyRoute);
 
-                if (isAuthenticated.get() === false) {
-
-                    // These are the URLs which are allowed if not authenticated.
-
-                    var newRouteRequiresAuth = RouteRequiresAuth(newRoute);
-                    console.log(newRouteRequiresAuth);
-                    console.log(newRoute);
-                    if (newRouteRequiresAuth === true) {
-                        // Route requires authentication, redirect to the log in page and supply the return URL.
-                        console.log("User was not authenticated , but route '" + newRoute + "' requires authentication. Aborting and redirecting to the login page.");
-                        redirectTo = "/Account/Login/" + encodeURIComponent("#" + newRoute);
-                    }
-                }
-                
-                if (redirectTo !== "") {
-                    // Cancel this route.
-                    e.preventDefault();
-                    console.log('redirecting to ', redirectTo);
-                    router.navigate("#" + redirectTo);
-                }
-
                 pubSub.publish(pubSub.MESSAGES.ROUTE_CHANGING);
             }
 
@@ -172,21 +151,7 @@
         }
         
         function RouteRequiresAuth(route) {
-            console.log('route=', route);
-           //return false;
-            var UNAUTH_ROUTES = [
-                "/Account/Login",
-                "/Home/Index",
-                "/Account/Register"
-            ];
-            var requiresAuthentication = true;
-            // Check if this route needs auth.
-            $.each(UNAUTH_ROUTES, function (index, value) {
-                if (route.toLowerCase().indexOf(value.toLowerCase()) == 0) {
-                    requiresAuthentication = false;
-                }
-            });
-            return requiresAuthentication;
+            return false;
         }
         // == PROPERTIES & METHODS ==
         

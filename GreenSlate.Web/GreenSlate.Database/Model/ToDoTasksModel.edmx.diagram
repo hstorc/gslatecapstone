@@ -6,9 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="32e7c0f724274288bcc33578d55ef302" Name="Diagram1">
         <EntityTypeShape EntityType="ToDoTasksModel.AspNetUser" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ToDoTasksModel.ToDoTask" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
-        <AssociationConnector Association="ToDoTasksModel.FK_Task_CreatedByUser" ManuallyRouted="false" />
-        <AssociationConnector Association="ToDoTasksModel.FK_Task_CreatedForUser" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ToDoTasksModel.ToDoTask" Width="1.5" PointX="6" PointY="1.625" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

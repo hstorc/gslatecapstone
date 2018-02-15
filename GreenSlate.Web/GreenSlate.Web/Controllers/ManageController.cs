@@ -10,7 +10,6 @@ using GreenSlate.Web.Models;
 
 namespace GreenSlate.Web.Controllers
 {
-    [Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;
