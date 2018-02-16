@@ -12,8 +12,6 @@
         layout,
         pubSub
     ) {
-        console.log('layout', layout);
-        console.log('pubSub', pubSub);
         // This method is used to lazy-load the resources required by a controller the first time it is needed,
         // rather than having to load all controllers when the router inits.
         function GetControllerMethod(controllerClassName, controllerMethodName, renderMethod) {
@@ -21,10 +19,8 @@
                 // Store the route parameters.
                 var routeArguments = arguments;
                 // Get the controller from the dependency injector.
-                console.log(controllerClassName);
                 requirejs([controllerClassName], function (ControllerClass) {
                     // Instantiate the controller.
-                    console.log(controllerClassName);
                     var controller = new ControllerClass(renderMethod);
 
                     // Call the action method on the controller.

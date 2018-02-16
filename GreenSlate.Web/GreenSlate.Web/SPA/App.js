@@ -1,7 +1,11 @@
 ﻿define(
     "app",
-    ["require", "router", "Util.layout"],
-    function (require,router,layout) {
+    ["require",
+        "router",
+        "Util.layout",
+        "Global.SignalR"
+        ],
+    function (require, router, layout, SignalR) {
         //var $ = require('../3rdParty/jquery'),
          //   _ = require('underscore') || window._;
         // Define the module.

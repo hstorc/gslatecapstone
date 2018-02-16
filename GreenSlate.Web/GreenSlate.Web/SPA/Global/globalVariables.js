@@ -32,35 +32,11 @@ var gridDataSourceObject = {
 
 var isAuthenticated = {
     get: function () {
-        if (typeof (window._isAuthenticated) == "undefined") {
-            window._isAuthenticated = false;
-        }
-        // TODO: refactor this to look at the cookie, if possible.
-        return window._isAuthenticated;
+       
+        return true;
     },
     set: function (isAuthenticated, doPublish, redirectTo) {
-        reloadAntiForgeryToken(function () {
-            window._isAuthenticated = isAuthenticated;
-            requirejs(["pubSub"],
-                function (pubSub) {
-                    if (typeof redirectTo != "undefined") {
-                        
-                    }
-                    if (typeof (doPublish) == 'undefined' || doPublish == true) {
-                        // Get pubSub
-
-                        if (isAuthenticated == true) {
-                            // fire an application event
-                            pubSub.publish(pubSub.MESSAGES.LOG_IN);
-                        } else {
-                            // fire an application event
-                            pubSub.publish(pubSub.MESSAGES.LOG_OUT);
-                        }
-
-                    }
-
-                });
-        });
+    
     }
 };
 
@@ -160,17 +136,9 @@ var DesktopNotificationPermissions = {
 var mobileMaxWidth = 767;
 
 var entityTypes = {
-    Timecards: "timecard",
-    Batches: "batch",
-    I9s: "i9",
-    DealMemos: "deal memo",
-    StateForms: "state form",
-    PurchaseOrders: "purchase order"
+    
 };
 var entityEditUrl = {
-    "timecard": "~/#/timecard/edit/",
-    "batch": "~/#/batch/edit/",
-    "purchase order": "~/#/purchaseOrder/edit/"
 };
 
 var events = {

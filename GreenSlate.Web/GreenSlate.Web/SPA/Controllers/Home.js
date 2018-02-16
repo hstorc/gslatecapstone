@@ -6,15 +6,15 @@
     [
         //"Util.getViewResources",
         "Util.layout",
-       // "ViewModels.PurchaseOrder.EditVM",
-       // "ViewModels.PurchaseOrder.ListVM"
+        // "ViewModels.PurchaseOrder.EditVM",
+        // "ViewModels.PurchaseOrder.ListVM"
     ],
     function (
         // == DEPENDENCY INJECTIONS ==
-       // getViewResources,
+        // getViewResources,
         layout,
-       // EditVM,
-       // ListVM
+        // EditVM,
+        // ListVM
     ) {
         // == CONSTRUCTOR ==
         function HomeController(render) {
@@ -24,47 +24,158 @@
 
         // == PROPERTIES & METHODS ==
         HomeController.prototype.index = function () {
+
+            // var hubUrl = "http://localhost:42471//signalr/hubs";
+            var hubUrl = "http://localhost:50336/signalr/hubs";
+            var connection = $.hubConnection(hubUrl, { useDefaultPath: false });
+            var hub = connection.createHubProxy("ToDoTasksHub");
+            connection.logging = true;
+            var hubStart = connection.start({ jsonp: true });
+
+            $("#notification").kendoNotification({
+                width: "100%",
+                position: {
+                    top: 0,
+                    left: 0
+                }
+            });
             $("#toDoTasks").kendoGrid({
+                height: 550,
+                //editable:true,
+                editable: {
+                    mode: "popup",
+                    template: kendo.template($("#taskDetails").html())
+                },
+                sortable: true,
+                columns: [
+                    { field: "Actions", command: ["destroy", "edit"] },
+                    {
+                        field: "Completed",
+                        width: 120, template: '<input type="radio" name="Completed#=Id #" id="yesCompleted#=Id #" value="true" #= Completed ? "checked=checked" : "" # class="chkbx" ></input>' +
+                            ' <label for="yesCompleted#=Id #">Yes</label>' +
+                            '<input type="radio" name="Completed#=Id #" id="noCompleted#=Id #" value="false" #= !Completed ? "checked=checked" : "" # class="chkbx" ></input>' +
+                            ' <label for="noCompleted#=Id #">No</label>'
+                    },
+                    { field: "Title" },
+                    { field: "Estimation" },
+                    {
+                        field: "CreatedBy", filterable: {
+                            ui: userFilter
+                        }
+                    }
+                   
+                ],
+                toolbar: ["create"],
                 dataSource: {
-                    transport: {
-                        read: { url: "/api/todotasks", type: "GET" },
-                        update: { url: "/api/todotasks/1002", type: "PUT" },
-                        create: { url: "/api/todotasks", type: "POST" },
-                        destroy: { url: "/api/todotasks/1042", type: "DELETE" }
+                    type: "signalr",
+                    autoSync: true,
+                    // Handle the push event to display notifications when push updates arrive
+                    push: function (e) {
+                        var notification = $("#notification").data("kendoNotification");
+                        notification.success(e.type);
                     },
                     schema: {
                         model: {
                             id: "Id",
                             fields: {
-                                Id: { editable: false, nullable: true },
-                                Completed: { editable: true, nullable: true },
-                                Title: { editable: true, nullable: false, validation: { required: true } },
-                                Estimation: { editable: true, nullable: false, validation: { required: true } },
-                                createdByName: { editable: true, nullable: false, validation: { required: true } }
+                                "ID": { editable: false, nullable: true },
+                                "CreatedBy": { editable: true, nullable: true },
+                                "Title": { editable: true, nullable: true },
+                                "Estimation": { type: "number" },
+                                "Completed": { editable: true, nullable: true }
+                            }
+                        },
+                        errors: "Errors"
+                    },
+                    error: function (e) {
+                        console.log('onerror', e);
+                        alert(e.errors);
+                    },
+                    sort: [{ field: "Id", dir: "desc" }],
+                    transport: {
+                        signalr: {
+                            promise: hubStart,
+                            hub: hub,
+                            server: {
+                                read: "read",
+                                update: "update",
+                                destroy: "destroy",
+                                create: "create"
+                            },
+                            client: {
+                                read: "read",
+                                update: "update",
+                                destroy: "destroy",
+                                create: "create"
                             }
                         }
-                    },
-                    sort: [{ field: "Id", dir: "asc" }],
-                    pageSize: 10
+                    }
                 },
-                columns: [
-                    { field: "Title", title: "Title", width: "120px" },
-                    { field: "Estimation", title: "Estimated Hours", width: "100px" },
-                    { field: "CreatedByName", title: "created By" },
-                    { command: ["edit", "destroy"], title: "&nbsp;", width: "240px" }],
-                editable: "inline",
-                pageable: true,
-                sortable: true,
-                toolbar: ["create"]
+                filterable: {
+                    extra: false,
+                    operators: {
+                        string: {
+                            startswith: "Starts with",
+                            eq: "Is equal to",
+                            neq: "Is not equal to"
+                        }
+                    }
+                },
+                detailTemplate: kendo.template($("#taskDetails").html()),
+                detailInit: detailInit
             });
 
-            function models(e) {
-                e.preventDefault();
-                var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-               // window.location.href = "/Maintenance/Models/" + dataItem.Id;
-            }
         }
 
+        function detailInit(e) {
+            console.log(e);
+            var detailRow = e.detailRow;
+            var model = e.data;
+            kendo.bind(detailRow, model);
+            model.bind('change',
+                function (e) {
+                    var tr = $('tr[data-uid=' + model.uid + ']');
+                    $('#grid').data().kendoGrid.expandRow(tr);
+                });
+        }
+
+
+        function preventPost(e) {
+            // if (e.keyCode === 13) {
+            console.log(e);
+            e.preventDefault();
+            // }
+        }
+
+        var users = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: 'api/users',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                model: {
+                    id: "name"
+                }
+            }
+        });
+
+        function userFilter(element) {
+            element.kendoDropDownList({
+                dataSource: users,
+                optionLabel: "--Select Value--"
+            });
+        }
+
+        $("title").focusout(preventPost);
+        $("testimsationitle").focusout(preventPost);
+        $("title").keyup(preventPost);
+        $("estimsation").keyup(preventPost);
+        $("title").keydown(preventPost);
+        $("estimsation").keydown(preventPost);
+
         return HomeController;
+
     }
-)
+);

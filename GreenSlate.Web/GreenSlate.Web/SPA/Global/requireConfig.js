@@ -7,7 +7,7 @@ var resolveUrl = function (relativeUrl) {
     }
 
     // Determine if the URL is relative.
-    var beginsWithRelativePath = relativeUrl.indexOf('~/') == 0 || relativeUrl == '~';
+    var beginsWithRelativePath = relativeUrl.indexOf('~/') === 0 || relativeUrl === '~';
 
     if (beginsWithRelativePath) {
         // Resolve the ~ and return.
@@ -26,10 +26,11 @@ requirejs.config({
     paths: {
         "app": "App",
         "router": "Router",
-        "pubSub": "../3rdParty/pubsub/pubsub",
+        "Global.SignalR": "../3rdParty/signalr/jquery.signalR-2.2.1",
         "Util.layout": "Util/Layout",
         "Controllers.ToDoTasks": "Controllers/ToDoTask",
-        "Controllers.Home": "Controllers/Home"
+        "Controllers.Home": "Controllers/Home",
+        "pubSub":"../3rdParty/pubsub/pubsub"
     }
 }
 );

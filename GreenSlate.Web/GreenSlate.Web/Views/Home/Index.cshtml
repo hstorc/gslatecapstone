@@ -1,11 +1,25 @@
 ﻿<h2>Task Manager</h2><br />
 <h3>by Hayim</h3>
 
-<div id="toDoTasks"></div>
+<div id="toDoTasks" class="text-primary"></div>
+<span id="notification" class="alert-info bg-warning"></span>
 
 @section scripts
 {
     <script>
         window._isAuthenticated = true;
+    </script>
+
+    <script type="text/x-kendo-template" id="taskDetails">
+        <div class="k-edit-label"><label for="Title">Title</label></div>
+        <div data-container-for="Title" class="k-edit-field">
+            <input type="text" class="k-input k-textbox" name="Title" data-bind="value:Title" id="title">
+        </div>
+        <div class="k-edit-label"><label for="Estimation">Estimation</label></div>
+        <div data-container-for="Estimation" class="k-edit-field">
+            <input type="text" name="Estimation" data-type="number" data-bind="value:Estimation" data-role="numerictextbox" 
+                   role="spinbutton" class="k-input" aria-disabled="false" style="display: none;" aria-valuenow="32"
+                   id="estimation">
+        </div>       
     </script>
 }

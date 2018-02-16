@@ -1738,7 +1738,9 @@
 
         setup: function(options, type) {
             options = options || {};
-
+            console.log(this.options);
+            console.log(type);
+             console.log(this.options[type]);
             var that = this,
                 parameters,
                 operation = that.options[type],

@@ -1,8 +1,8 @@
 using GreenSlate.Business;
-using GreenSlate.Database;
-using GreenSlate.Web.Controllers;
-using System;
 using GreenSlate.Database.Model;
+using GreenSlate.Web.Controllers;
+using Microsoft.AspNet.SignalR.Hubs;
+using System;
 using Unity;
 //using GreenSlate.Web.Persistance;
 using Unity.Injection;
@@ -47,12 +47,13 @@ namespace GreenSlate.Web
             // container.LoadConfiguration();
 
             // TODO: Register your type's mappings here.
-             container.RegisterType<ITodoService, TodoService>(new PerResolveLifetimeManager());
-            container.RegisterType<IToDoDbContext, GreenSlate.Database.ToDoTaskDbContext> (new PerResolveLifetimeManager());
+            container.RegisterType<IHubActivator, UnityHubActivator>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ITodoService, TodoService>(new PerResolveLifetimeManager());
+            container.RegisterType<IToDoDbContext, GreenSlate.Database.ToDoTaskDbContext>(new PerResolveLifetimeManager());
 
             container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<ManageController>(new InjectionConstructor());
-            
+
 
         }
     }

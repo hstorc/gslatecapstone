@@ -9,7 +9,7 @@ namespace GreenSlate.Web.Helpers
         {
             return new ToDoViewModel
             {
-                Id=task.Id,
+                Id=task.Id.HasValue?task.Id.Value:0,
                 CreatedFor = task.CreatedFor,
                 CreatedByName = task.CreatedBy,
                 Estimation = task.Estimation,

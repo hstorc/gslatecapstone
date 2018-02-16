@@ -13,7 +13,7 @@ namespace GreenSlate.Business
     public class TodoService : ITodoService, IDisposable
     {
         private IToDoDbContext db ;//= new ToDoByHayimEntities1();
-
+        private TodoService service;
         public TodoService()
         {
             
@@ -24,6 +24,12 @@ namespace GreenSlate.Business
             // this.db = db;
             this.db =db ;
         }
+
+        public static TodoService NewInstance(IToDoDbContext context)
+        {
+            return new TodoService(context);
+        }
+
         public List<DtoToDoTask> GetToDoTasks()
         {
             return db.ToDoTasks
@@ -107,7 +113,11 @@ namespace GreenSlate.Business
 
         public HttpStatusCode PostToDoTask(DtoToDoTask model, string userId)
         {
-            // var createdfor = db.AspNetUsers.SingleOrDefault(u => u.Email.Equals(model.CreatedFor));
+            if (model.Id.HasValue)
+            {
+                return PutToDoTask(model.Id.Value, model, userId);
+            }
+
             var users= db.AspNetUsers.ToList();
             Random random = new Random();
             int index = random.Next(0, users.Count);
@@ -120,7 +130,6 @@ namespace GreenSlate.Business
 
             ToDoTask toDoTask = new ToDoTask
             {
-                Id = model.Id,
                 CreatedBy = createdby.Name,
                 CreatedTime = DateTime.Now,
                 Title = model.Title,
