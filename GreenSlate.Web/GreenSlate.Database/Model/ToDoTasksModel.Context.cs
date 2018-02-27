@@ -27,5 +27,9 @@ namespace GreenSlate.Database.Model
     
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<ToDoTask> ToDoTasks { get; set; }
+
+        //public System.Data.Entity.DbSet<GreenSlate.Business.DtoToDoTask> DtoToDoTasks { get; set; }
+
+        //public System.Data.Entity.DbSet<GreenSlate.Business.DtoToDoTask> DtoToDoTasks { get; set; }
     }
 }

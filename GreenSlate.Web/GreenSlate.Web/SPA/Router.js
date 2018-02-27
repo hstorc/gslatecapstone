@@ -18,12 +18,14 @@
             return function () {
                 // Store the route parameters.
                 var routeArguments = arguments;
+                //console.log(controllerClassName, controllerMethodName, renderMethod);
                 // Get the controller from the dependency injector.
                 requirejs([controllerClassName], function (ControllerClass) {
                     // Instantiate the controller.
                     var controller = new ControllerClass(renderMethod);
 
                     // Call the action method on the controller.
+                    //console.log(ControllerClass);
                     controller[controllerMethodName].apply(
                         controller, // Call it like this so "this" will be the controller instance itself.
                         routeArguments); // Pass the original route parameters.
@@ -35,6 +37,7 @@
 
         function renderRoute(route, renderCallback) {
             // get the route
+            console.trace();
             var routeInfo = routeInfos[route];
 
             if (!routeInfo) {
@@ -54,10 +57,10 @@
             var simpleRoute = route;
             // remove everything after the colon
             var colonIndex = simpleRoute.indexOf(':');
-            simpleRoute = simpleRoute.substring(0, colonIndex != -1 ? colonIndex : simpleRoute.length);
+            simpleRoute = simpleRoute.substring(0, colonIndex !== -1 ? colonIndex : simpleRoute.length);
             // remove everything after the optional slash (/)
             var optSlashIndex = simpleRoute.indexOf('(/)');
-            simpleRoute = simpleRoute.substring(0, optSlashIndex != -1 ? optSlashIndex : simpleRoute.length);
+            simpleRoute = simpleRoute.substring(0, optSlashIndex !== -1 ? optSlashIndex : simpleRoute.length);
             // record the route in our private collection
             routeInfos[simpleRoute] = { controllerClassName: controllerClassName, controllerMethodName: controllerMethodName };
 
@@ -76,7 +79,16 @@
 
 
         // Default
-        AddRoute("/", "Home", "index");
+        AddRoute("/", "Task", "index");
+        AddRoute("/home", "Home", "index");
+        AddRoute("/task", "Task", "index");
+        AddRoute("/task/create", "Task", "create");
+        AddRoute("/task/create(/)(:id)", "Task", "edit");
+        AddRoute("/task/edit(/)(:id)", "Task", "edit");
+        // route missing 404 page
+        AddRoute("/errorhandler/routemissing", "ErrorHandler", "routemissing");
+        console.log(window.location);
+      //  window.location.href = window.location.host+ "#/task";
 
         function onRouteChanging(e) {
             // close modal window
@@ -143,7 +155,7 @@
         
         // == CONSTRUCTOR ==
         function RouterInterface() {
-            console.log("Router constructor executing.");
+            
         }
         
         function RouteRequiresAuth(route) {

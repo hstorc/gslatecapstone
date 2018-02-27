@@ -1,0 +1,36 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+<h3>
+    Create Task
+</h3>
+<div id="task-form" class="form-horizontal">
+    <div class="card-block center-block">
+        <form id="TaskForm" class="k-form-inline">
+            <label class="k-form-field col-lg-3">
+                <label for="title">Title</label>
+                <input class="k-textbox" placeholder="Title" data-bind="value:Title" required 
+                       data-minLength="4" data-maxLength="20" 
+                       data-validtitlelengthmsg="Title length can be minimum 10 till maxumum of 100 characters"
+                       id="title" name="title"/><span class="k-invalid-msg" data-for="title"></span>
+            </label>
+            <label class="k-form-field col-lg-3">
+                <label for="estimation">Title</label>
+                <input id="estimation" name="estimation" type="number" class="k-numerictextbox" placeholder="32" data-bind="value:Estimation" required
+                        data-estimationRangeMin="0" data-estimationRangeMax="100" data-estimationrangemsg="estimation range between 0 and 100" />
+                <span class="k-invalid-msg" data-for="estimation"></span>
+            </label>
+            <label class="k-form-field col-lg-3" data-bind="visible:Id>0">                
+                <input type="checkbox" class="k-checkbox" id="completed" data-bind="checked:Completed"   />
+                <label for="completed" class="k-checkbox-label">Completed</label>
+            </label>
+            <div class="km-right center-block right navbar-right buttons-block">
+                <a class="k-button" data-bind="click: Cancel" id="cancel">Cancel</a>
+                <a class="k-button k-primary" data-bind="click: OnClick" id="save">Submit</a>
+            </div>
+        </form>        
+    </div>
+   
+</div>
+
+<script type="text/javascript" src="~/SPA/Util/ValidateTask.js"></script>
+

@@ -1,25 +1,45 @@
-﻿<h2>Task Manager</h2><br />
-<h3>by Hayim</h3>
-
-<div id="toDoTasks" class="text-primary"></div>
-<span id="notification" class="alert-info bg-warning"></span>
-
-@section scripts
+﻿
+<div class="app-content-body">
+    
+    @section scripts
 {
-    <script>
-        window._isAuthenticated = true;
-    </script>
+        <script>
+            window._isAuthenticated = true;
+        </script>
 
-    <script type="text/x-kendo-template" id="taskDetails">
-        <div class="k-edit-label"><label for="Title">Title</label></div>
-        <div data-container-for="Title" class="k-edit-field">
-            <input type="text" class="k-input k-textbox" name="Title" data-bind="value:Title" id="title">
-        </div>
-        <div class="k-edit-label"><label for="Estimation">Estimation</label></div>
-        <div data-container-for="Estimation" class="k-edit-field">
-            <input type="text" name="Estimation" data-type="number" data-bind="value:Estimation" data-role="numerictextbox" 
-                   role="spinbutton" class="k-input" aria-disabled="false" style="display: none;" aria-valuenow="32"
-                   id="estimation">
-        </div>       
-    </script>
-}
+        <script type="text/x-kendo-template" id="taskDetails">
+            <div class="k-edit-label"><label for="Title">Title</label></div>
+            <div data-container-for="Title" class="k-edit-field">
+                <input type="text" class="k-input k-textbox" name="Title" data-bind="value:Title" id="title">
+            </div>
+            <div class="k-edit-label"><label for="Estimation">Estimation</label></div>
+            <div data-container-for="Estimation" class="k-edit-field">
+                <input type="text" name="Estimation" data-type="number" data-bind="value:Estimation"
+                       data-role="numerictextbox"
+                       role="spinbutton" class="k-input" aria-disabled="false"
+                       style="display: none;" aria-valuenow="32"
+                       id="estimation">
+            </div>
+            <div class="k-edit-label completed-field"><label for="Completed">Completed</label></div>
+            <div data-container-for="Completed" class="k-edit-field completed-field">
+                <input type="radio" name="Completed" id="yesCompleted" value="true"
+                       #=Completed ? "checked=checked" : "" #
+                       class="chkbx k-input" />
+                <label for="yesCompleted">Yes</label>
+                <input type="radio" name="Completed" id="noCompleted" value="false"
+                       #=!Completed ? "checked=checked" : "" #
+                       class="chkbx k-input" />
+                <label for="noCompleted">No</label>
+            </div>
+        </script>
+
+
+        <script type="text/kendo-template" id="message">
+            <div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error"
+                 style="margin: 0.5em; display: block; " data-for="#=field#" data-valmsg-for="#=field#" id="#=field#_validationMessage">
+                <span class="k-icon k-warning"> </span>#=message#<div class="k-callout k-callout-n"></div>
+            </div>
+        </script>
+    }
+
+</div>

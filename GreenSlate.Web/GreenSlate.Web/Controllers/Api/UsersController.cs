@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GreenSlate.Database.Model;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using GreenSlate.Database.Model;
 
 namespace GreenSlate.Web.Controllers.Api
 {
@@ -17,9 +14,9 @@ namespace GreenSlate.Web.Controllers.Api
         private ToDoDbContext db = new ToDoDbContext();
 
         // GET: api/Users
-        public IQueryable<AspNetUser> GetAspNetUsers()
+        public IQueryable<string> GetAspNetUsers()
         {
-            return db.AspNetUsers;
+            return db.AspNetUsers.Select(u=>u.Name).OrderBy(u=>u);
         }
 
         // GET: api/Users/5

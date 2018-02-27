@@ -1,0 +1,23 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+<div class="app-content-inner">
+    <h1>SPA home index</h1>
+    <p>
+        <span data-bind="text:title"></span>
+        <span data-bind="text:title"></span>
+    </p>
+    <div id="app"></div>
+    <div class="person">
+        <div data-bind="text: person.name">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var viewModel = kendo.observable({
+            person: {
+                name: "John Doe"
+            }
+        });
+        kendo.bind($(".person"), viewModel);
+    });
+</script>

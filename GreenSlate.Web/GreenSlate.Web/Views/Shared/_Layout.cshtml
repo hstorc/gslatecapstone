@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Capstone</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/all")
@@ -11,14 +11,32 @@
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.117/styles/kendo.material.mobile.min.css" />
 </head>
 <body>
-<div class="container body-content">
-    @RenderBody()
-    @RenderSection("SPAViews", required: false)
-    <hr/>
-    <footer>
-        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-    </footer>
-</div>
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <ul class="nav nav-pills nav-justified">
+            <li role="presentation" class="active">
+            <a href="#/task" class="k-icon k-i-calendar k-icon-64">                
+            </a>
+            </li>
+            <li role="presentation"><a href="#" class="maxheight km-absolute absolute-top0 text-center">
+                <p class="km-large font-weight-bold">Task Manager</p>
+                <p class="km-large font-italic">By Hayim Storc</p>
+                 </a></li>
+            <li role="presentation">
+                <a class="k-button k-button-icontext btn-link k-grid-edit pull-right" href="#/task/create">Create New Task</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+
+        @RenderSection("SPAViews", required: false)
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
 
     @Scripts.Render("~/bundles/all")
     @RenderSection("Scripts", required: false)
@@ -31,8 +49,8 @@
                 app.start();
             });
             requirejs(["router"], function (app) {
-                    app.start();
-                });
+                app.start();
+            });
         }
         );
     </script>

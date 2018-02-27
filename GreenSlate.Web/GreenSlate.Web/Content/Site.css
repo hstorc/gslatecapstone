@@ -34,3 +34,33 @@ textarea {
         padding: 10px 15px;
     }
 }
+
+.notCompleted {
+    background-color: indianred !important;
+    color: white;
+}
+
+.completed {
+    background-color: greenyellow !important;
+}
+
+.k-icon-64 {
+    font-size: 64px !important; /* Sets icon size to 64px */
+    max-height:100% !important;
+}
+
+.maxheight {
+    max-height: 100% !important;
+}
+
+.absolute-top0 {
+    position:absolute !important;
+    top:0;
+}
+.buttons-block {
+    margin-top:3em;
+}
+
+#task-form {
+    height:450px;
+}

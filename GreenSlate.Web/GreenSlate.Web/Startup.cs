@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using GreenSlate.Business;
+using GreenSlate.Database;
+using GreenSlate.Web.Hubs;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Owin;
 using Owin;
@@ -15,17 +18,20 @@ namespace GreenSlate.Web
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            
 
+            GlobalHost.DependencyResolver.Register(typeof(ToDoTasksHub),
+               () => new ToDoTasksHub(
+                   new TodoService(
+                       new ToDoTaskDbContext())));
             //  GlobalHost.DependencyResolver.Register(typeof(ITodoService), () => new TodoService());
-                //   GlobalHost.DependencyResolver.Register(typeof(IToDoDbContext), () => new ToDoTaskDbContext());
+            //   GlobalHost.DependencyResolver.Register(typeof(IToDoDbContext), () => new ToDoTaskDbContext());
 
-                app.MapSignalR(
+            app.MapSignalR(
                 new HubConfiguration
                 {
                     EnableJSONP = true,
                     EnableDetailedErrors = true,
-                    EnableJavaScriptProxies = false
+                    EnableJavaScriptProxies = true
 
                 });
         }

@@ -6,18 +6,20 @@
         "Global.SignalR"
         ],
     function (require, router, layout, SignalR) {
-        //var $ = require('../3rdParty/jquery'),
-         //   _ = require('underscore') || window._;
+        
         // Define the module.
         function initValidation() {
             // initialize validators
+            console.log('customValidationRules=',customValidationRules);
             window.validation = $(document.body).kendoValidator(customValidationRules).data("kendoValidator");
 
         }
 
         var module = {
-            start: function() {
+            start: function () {
+                console.log("App starting at " + (new Date()))
                 router.start();
+                //window.location.href = window.location.host + "/#/task";
             }
         };
         return module;

@@ -1,4 +1,5 @@
 ﻿using GreenSlate.Database.Model;
+using Kendo.DynamicLinq;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,7 +14,7 @@ namespace GreenSlate.Business
     public class TodoService : ITodoService, IDisposable
     {
         private IToDoDbContext db ;//= new ToDoByHayimEntities1();
-        private TodoService service;
+     //   private TodoService service;
         public TodoService()
         {
             
@@ -43,16 +44,16 @@ namespace GreenSlate.Business
                 }).ToList();
         }
 
-        public DtoToDoTask GetDtoToDoTask(int id,string userId)
+        public DtoToDoTask GetToDoTask(int id,string userId)
         {
             //ignoring userid- anybody can get
-            ToDoTask toDoTask = GetToDoTask(id,userId);
+            ToDoTask toDoTask = GetTask(id,userId);
             if (toDoTask == null
                 || toDoTask.Id == 0)
             {
                 return null;
             }
-
+            
             return new DtoToDoTask
             {
                 Id=toDoTask.Id,
@@ -65,7 +66,7 @@ namespace GreenSlate.Business
 
         }
 
-        public ToDoTask GetToDoTask(int id, string userId)
+        public ToDoTask GetTask(int id, string userId)
         {
             //ignoring userid- anybody can get
             ToDoTask toDoTask = db.ToDoTasks.Find(id);
@@ -78,13 +79,11 @@ namespace GreenSlate.Business
             return toDoTask;
 
         }
-
-
-
+        
         public HttpStatusCode PutToDoTask(int id, DtoToDoTask model,string userId)
         {
             //ignoring userid- anybody can get
-            ToDoTask toDoTask = GetToDoTask(id,userId);
+            ToDoTask toDoTask = GetTask(id,userId);
             if (toDoTask==null)
             {
                 return HttpStatusCode.NotFound;
@@ -94,8 +93,7 @@ namespace GreenSlate.Business
             toDoTask.Title = model.Title;
             toDoTask.EstimatedHours = model.Estimation;
             toDoTask.Completed = model.Completed;
-            //toDoTask.CreatedBy = model.CreatedBy;
-
+            
             db.Entry(toDoTask).State = EntityState.Modified;
 
             try
@@ -107,17 +105,12 @@ namespace GreenSlate.Business
                 return HttpStatusCode.BadRequest;
             }
 
-            return HttpStatusCode.NoContent;
+            return HttpStatusCode.OK;
 
         }
 
         public HttpStatusCode PostToDoTask(DtoToDoTask model, string userId)
-        {
-            if (model.Id.HasValue)
-            {
-                return PutToDoTask(model.Id.Value, model, userId);
-            }
-
+        {           
             var users= db.AspNetUsers.ToList();
             Random random = new Random();
             int index = random.Next(0, users.Count);
@@ -146,7 +139,7 @@ namespace GreenSlate.Business
         public HttpStatusCode DeleteToDoTask(int id,string userid)
         {
             //ignoring userid- anybody can delete
-            ToDoTask toDoTask = GetToDoTask(id,userid);
+            ToDoTask toDoTask = GetTask(id,userid);
             if (toDoTask == null)
             {
                 return HttpStatusCode.NotFound;
@@ -166,17 +159,35 @@ namespace GreenSlate.Business
 
         public void Dispose()
         {
-            //throw new NotImplementedException();
+            db = null;
         }
 
         public bool ToDoTaskExists(int id, string userid)
         {
             throw new NotImplementedException();
+        }       
+
+        public HttpStatusCode DeleteToDoTask(DtoToDoTask task, string userid)
+        {
+            return (DeleteToDoTask(task.Id.Value, ""));
+            
+            
         }
 
-        DtoToDoTask ITodoService.GetToDoTask(int id, string userid)
+        public DataSourceResult GetTaskFiltered(DataSourceRequest request)
         {
-            throw new NotImplementedException();
+            return db.ToDoTasks
+                .Select(v => new DtoToDoTask
+                {
+                    Id = v.Id,
+                    Completed = v.Completed,
+                    Title = v.Title,
+                    Estimation = v.EstimatedHours,
+                    CreatedBy = v.CreatedBy
+                }).ToDataSourceResult(request.Take,
+                    request.Skip,
+                    request.Sort,
+                    request.Filter);
         }
     }
 }

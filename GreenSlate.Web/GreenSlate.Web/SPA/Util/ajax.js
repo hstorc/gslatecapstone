@@ -20,7 +20,7 @@ define(
             window._currentAjaxRequests.push(url);
 
             // start the progress bar!
-            NProgress.start();
+            //NProgress.start();
         }
 
         function removeFromRetry(url) {
@@ -85,10 +85,10 @@ define(
 
             if (window._currentAjaxRequests.length == 0) {
                 // All done -- stop the progress bar.
-                NProgress.done();
+               // NProgress.done();
             } else {
                 // Otherwise, let's progress it a bit
-                NProgress.inc();
+                //NProgress.inc();
             }
         }
 
@@ -104,7 +104,7 @@ define(
                 }
 
                 // Format all dates to whatever WEB API is expecting (UTC for now)
-                convertAllDateTypesToDateStrings(options.parameters);
+                //convertAllDateTypesToDateStrings(options.parameters);
 
                 if (options === null || typeof (options) === "undefined") {
                     options = {};
@@ -181,7 +181,7 @@ define(
                                 }
 
                                 // Convert all properties that are string dates to Date objects
-                                convertAllDateStringsToDateTypes(responseData);
+                                //convertAllDateStringsToDateTypes(responseData);
                                 // If the default behavior was overriden
                                 if (typeof (options.okCallback) !== "undefined") {
                                     var ajaxcall = this;

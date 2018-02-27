@@ -1,0 +1,29 @@
+[33mcommit a102bf11798cd88d91683226f3c440f322b4c7f9[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Hayim Storc <hayim.storc@gslate.com>
+Date:   Tue Feb 20 18:12:36 2018 -0500
+
+    trying to stop posting of edit dialog
+
+[33mcommit 82e11c662749e8e98a9e3e0daaf280ffcd89d40c[m
+Author: Hayim Storc <hayim.storc@gslate.com>
+Date:   Tue Feb 20 15:48:31 2018 -0500
+
+    kind of injection in Statup.cs for hub for service for db
+
+[33mcommit ea67600455c1dd3b9b908c1d0319edec1c3b3498[m
+Author: Hayim Storc <hayim.storc@gslate.com>
+Date:   Fri Feb 16 18:33:00 2018 -0500
+
+    kendo filtering
+
+[33mcommit 9b392b16f5d921d91a1e04026b39c1b1bde2a960[m
+Author: Hayim Storc <hayim.storc@gslate.com>
+Date:   Fri Feb 16 18:16:58 2018 -0500
+
+    Kendo works: CRUD
+
+[33mcommit bbcdc07162f2157c8dbc4a3a294d7636342fc172[m
+Author: Hayim Storc <hayim.storc@gslate.com>
+Date:   Thu Feb 15 12:37:42 2018 -0500
+
+    somewhat working,, post is working, deleted and put not working from Kendo

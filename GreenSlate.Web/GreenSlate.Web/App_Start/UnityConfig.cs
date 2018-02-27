@@ -1,6 +1,7 @@
 using GreenSlate.Business;
 using GreenSlate.Database.Model;
 using GreenSlate.Web.Controllers;
+using GreenSlate.Web.Hubs;
 using Microsoft.AspNet.SignalR.Hubs;
 using System;
 using Unity;
@@ -50,9 +51,10 @@ namespace GreenSlate.Web
             container.RegisterType<IHubActivator, UnityHubActivator>(new ContainerControlledLifetimeManager());
             container.RegisterType<ITodoService, TodoService>(new PerResolveLifetimeManager());
             container.RegisterType<IToDoDbContext, GreenSlate.Database.ToDoTaskDbContext>(new PerResolveLifetimeManager());
+            container.RegisterType<IToDoTasksHub, ToDoTasksHub>(new PerResolveLifetimeManager());
 
-            container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<ManageController>(new InjectionConstructor());
+           // container.RegisterType<AccountController>(new InjectionConstructor());
+           // container.RegisterType<ManageController>(new InjectionConstructor());
 
 
         }

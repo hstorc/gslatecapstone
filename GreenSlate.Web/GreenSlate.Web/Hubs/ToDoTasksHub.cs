@@ -1,27 +1,34 @@
 ﻿using GreenSlate.Business;
-using GreenSlate.Database;
-using GreenSlate.Database.Model;
-using GreenSlate.Web.ServiceFactory;
+using Kendo.DynamicLinq;
+using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 
 namespace GreenSlate.Web.Hubs
 {
     // [HubName("ToDoTasksHub")]
-    public class ToDoTasksHub : Microsoft.AspNet.SignalR.Hub
+    public class ToDoTasksHub : Microsoft.AspNet.SignalR.Hub, IToDoTasksHub
     {
         private ITodoService service;
-        
+
         public ToDoTasksHub(ITodoService service)
         {
             this.service = service;
         }
 
-        public ToDoTasksHub()
+        public ToDoTasksHub() { }
+
+        public DataSourceResult Data(DataSourceRequest request)
         {
-            IToDoDbContext context = new ToDoTaskDbContext();
-            ToDoTaskFactory factory = new ToDoTaskFactory(context);
-            service = factory.Build();
+            if (request.Take == 0)
+            {
+                request.Take = 1000;
+            }
+           // request.Filter.Filterde
+            var ret = service.GetTaskFiltered(request);
+            return ret;
         }
+
         public IEnumerable<DtoToDoTask> Read()
         {
             var ret = service.GetToDoTasks();
@@ -32,10 +39,10 @@ namespace GreenSlate.Web.Hubs
         {
             // validation
             // commit changes to database
-            service.PutToDoTask(entity.Id.Value, entity,"");
+            service.PutToDoTask(entity.Id.Value, entity, "");
             Clients.Others.update(entity);
         }
-        
+
         public DtoToDoTask Create(DtoToDoTask entity)
         {
             // validation
@@ -60,6 +67,50 @@ namespace GreenSlate.Web.Hubs
             service.DeleteToDoTask(entity.Id.Value, "");
             Clients.Others.destroy(entity);
         }
-       
+
+        //Specific User Call  
+        public void SendNewTask(DtoToDoTask task)
+        {
+            try
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<ToDoTasksHub>();
+                context.Clients.All.create(task);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+        }
+
+        public void SendUpdateTask(DtoToDoTask task)
+        {
+            try
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<ToDoTasksHub>();
+                context.Clients.All.update(task);
+                context.Clients.All.Invoke("Update", new DataSourceResult
+                {
+                    Data = new[] { task }
+                });
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+        }
+
+        public void SendDeleteTask(DtoToDoTask task)
+        {
+            try
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<ToDoTasksHub>();
+                context.Clients.All.destroy(task);
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+        }
+
     }
 }

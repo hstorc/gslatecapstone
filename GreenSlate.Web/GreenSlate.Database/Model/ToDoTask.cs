@@ -11,12 +11,18 @@ namespace GreenSlate.Database.Model
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ToDoTask
     {
         public string CreatedBy { get; set; }
         public string CreatedFor { get; set; }
+        [Required]
+        [MinLength(4)]
+        [MaxLength(20)]               
         public string Title { get; set; }
+        [Required]
+        [Range(0, 100)]
         public short EstimatedHours { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public int Id { get; set; }

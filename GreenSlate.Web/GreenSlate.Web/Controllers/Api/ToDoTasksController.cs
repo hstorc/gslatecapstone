@@ -1,106 +1,101 @@
 ﻿using GreenSlate.Business;
-using GreenSlate.Database.Model;
-using GreenSlate.Web.Helpers;
-using GreenSlate.Web.ViewModels;
+using GreenSlate.Web.Hubs;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 
 namespace GreenSlate.Web.Controllers.Api
 {
-
     public class ToDoTasksController : ApiController
     {
-        //unity dependancy here!!
-
-
         private ITodoService todoService;
+        Hubs.ToDoTasksHub todoHub;
 
         public ToDoTasksController()
         {
 
         }
 
-        public ToDoTasksController(ITodoService service)
+        public ToDoTasksController(ITodoService service, ToDoTasksHub hub)
         {
             todoService = service;
-        }
-        // GET: api/ToDoTasks
-       // [HttpGet]
-        public List<ToDoViewModel> GetToDoTasks()
-        {
-            return todoService.GetToDoTasks().Select(t => t.ToTaskViewModel()).ToList();
+            todoHub = hub;
         }
 
-        // GET: api/ToDoTasks/5
-        [ResponseType(typeof(ToDoViewModel))]
-        public IHttpActionResult GetToDoTask(int id)
+        // GET: api/DtoToDoTasks
+        public IEnumerable<DtoToDoTask> GetDtoToDoTasks()
         {
-            string userId = "";// User.Identity.GetUserId();
-            DtoToDoTask toDoTask = todoService.GetToDoTask(id, userId);
-            if (toDoTask == null)
+            return todoService.GetToDoTasks();
+        }
+
+        // GET: api/DtoToDoTasks/5
+        [ResponseType(typeof(DtoToDoTask))]
+        public IHttpActionResult GetDtoToDoTask(int id)
+        {
+            DtoToDoTask dtoToDoTask = todoService.GetToDoTask(id,"");
+            if (dtoToDoTask == null)
             {
                 return NotFound();
             }
 
-            return Ok(toDoTask.ToTaskViewModel());
+            return Ok(dtoToDoTask);
         }
 
-
-
-        // PUT: api/ToDoTasks/5
-       // [HttpPut]
+        // PUT: api/DtoToDoTasks/5
+        [HttpPut]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutToDoTask(int id, ToDoViewModel model)
+        public IHttpActionResult PutDtoToDoTask(DtoToDoTask dtoToDoTask)
         {
-            string userId = "";// User.Identity.GetUserId();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            return StatusCode(todoService.PutToDoTask(id, model.ToDtoTask(), userId));
-        }
 
-        // POST: api/ToDoTasks
-        //[HttpPost]
-        [ResponseType(typeof(ToDoViewModel))]
-        public IHttpActionResult PostToDoTask(ToDoViewModel model)
-        {
-            HttpStatusCode code;
-            string userId = "";// User.Identity.GetUserId();
-            if (model.Id==0)
+           /* if (id != dtoToDoTask.Id)
             {
-                 code = todoService.PostToDoTask(model.ToDtoTask(), userId);
-            }
+                return BadRequest();
+            }*/
 
-            else
-            {
-                 code = todoService.PutToDoTask(model.Id, model.ToDtoTask(), userId);
-            }
-
+            HttpStatusCode code= todoService.PutToDoTask(dtoToDoTask.Id.Value, dtoToDoTask, "");
+            todoHub.SendUpdateTask(dtoToDoTask);
             return StatusCode(code);
         }
 
-        // DELETE: api/ToDoTasks/5
-       // [HttpDelete]
-        [ResponseType(typeof(ToDoTask))]
-        public IHttpActionResult DeleteToDoTask(int id)
+        // POST: api/DtoToDoTasks
+        [ResponseType(typeof(DtoToDoTask))]
+        public IHttpActionResult PostDtoToDoTask(DtoToDoTask dtoToDoTask)
         {
-            string userId = "";// User.Identity.GetUserId();
-            return StatusCode(todoService.DeleteToDoTask(id, userId));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            HttpStatusCode code = todoService.PostToDoTask(dtoToDoTask, "");
+            todoHub.SendNewTask(dtoToDoTask);
+            return CreatedAtRoute("DefaultApi", new { id = dtoToDoTask.Id }, dtoToDoTask);
+        }
+
+        // DELETE: api/DtoToDoTasks/5
+        [ResponseType(typeof(DtoToDoTask))]
+        public IHttpActionResult DeleteDtoToDoTask(int id)
+        {
+           /* DtoToDoTask dtoToDoTask = db.DtoToDoTasks.Find(id);
+            if (dtoToDoTask == null)
+            {
+                return NotFound();
+            }
+
+            db.DtoToDoTasks.Remove(dtoToDoTask);
+            db.SaveChanges();
+            */
+            return Ok(id);
         }
 
         protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                todoService.Dispose();
-            }
+        {            
             base.Dispose(disposing);
         }
-
+       
     }
 }
